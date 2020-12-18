@@ -28,10 +28,10 @@ namespace Dating_WebAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
-            if (await UserExists(registerDTO.UserName))
+            if (await UserExists(registerDTO.Email) || await UserExists(registerDTO.UserName))
             {
                 // return http 400 and show message
-                return BadRequest("UserName is taken!");
+                return BadRequest("Email or UserName is taken!");
             }
             else
             {
@@ -40,9 +40,12 @@ namespace Dating_WebAPI.Controllers
 
                 AppUser user = new AppUser
                 {
-                    UserName = registerDTO.UserName.ToLower(),
+                    UserName = registerDTO.UserName,
+                    Email = registerDTO.Email,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                    PasswordSalt = hmac.Key
+                    PasswordSalt = hmac.Key,
+                    SexualId = registerDTO.SexualId,
+                    FavorId = registerDTO.FavorId,
                 };
                 _dataContext.Add(user);
                 await _dataContext.SaveChangesAsync();
@@ -83,10 +86,12 @@ namespace Dating_WebAPI.Controllers
             }
         }
 
-        private async Task<bool> UserExists(string userName)
+        private async Task<bool> UserExists(string data)
         {
+            bool emailExists = await _dataContext.Users.AnyAsync(n => n.Email.ToLower() == data.ToLower());
+            bool userNameExists = await _dataContext.Users.AnyAsync(n => n.UserName.ToLower() == data.ToLower());
             // 判斷帳號是否存在
-            return await _dataContext.Users.AnyAsync(n => n.UserName == userName.ToLower());
+            return emailExists || userNameExists;
         }
     }
 }

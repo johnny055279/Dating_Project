@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+
 })
 
 
@@ -15,18 +17,19 @@ export class AppComponent implements OnInit {
   users:any;
 
   // dependency injection, make http request to API
-  constructor(private http: HttpClient){}
+  constructor(private accountService: AccountService){}
 
-  //實作OnInit給AppComponent用，呼叫API，
+  // 實作OnInit給AppComponent用，呼叫API，
   ngOnInit() {
-    this.getUsers();
+    this.setCurrentUser();
   }
 
-  getUsers(){
-    // 要加上subscribe會驅動
-    this.http.get('https://localhost:5001/api/users').subscribe(
-      response => {this.users = response;},
-      error => {console.log(error)}
-    )
+  setCurrentUser(){
+    // localStorage有可能是null，所以要先判斷
+    var result = localStorage.getItem('user')
+    if(result){
+      const user: User = JSON.parse(result);
+      this.accountService.setCurrentUser(user);
+    }
   }
 }

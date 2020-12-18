@@ -17,7 +17,7 @@ namespace Dating_WebAPI.Extensions
         // 擴展方法應為靜態
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //設定LifeTime只存在一個request
+            //設定LifeTime只存在一個request，在同一個Requset中，不論是在哪邊被注入，都是同樣的實例。
             services.AddScoped<ITokenServices, TokenServices>();
 
             services.AddDbContext<DataContext>(option =>

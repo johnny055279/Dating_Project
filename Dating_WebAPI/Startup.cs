@@ -40,7 +40,7 @@ namespace Dating_WebAPI
 
             services.AddControllers();
 
-            // 啟用相同原始來源原則
+            // 啟用相同原始來源原則，在Configure定義來源。
             services.AddCors();
         }
 

@@ -1,0 +1,19 @@
+nav{
+    font-family: "微軟正黑體";
+    font-weight: bolder;
+    background-color: rgb(255, 221, 255)
+}
+
+.alert{
+    border:none;
+    margin-bottom: 0.4em;
+}
+
+.alert-custom{
+    font-family: "微軟正黑體";
+    font-weight: bolder;
+    background-color: rgb(255, 221, 255);
+    border: 1px solid rgb(212, 167, 212);
+    text-align: center;
+}
+  

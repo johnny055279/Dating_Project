@@ -14,5 +14,14 @@ namespace Dating_WebAPI.DTOs
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public int SexualId { get; set; }
+
+        [Required]
+        public int FavorId { get; set; }
     }
 }
