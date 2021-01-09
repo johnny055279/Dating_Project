@@ -2,6 +2,7 @@
 using Dating_WebAPI.DTOs;
 using Dating_WebAPI.Entities;
 using Dating_WebAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,8 +45,8 @@ namespace Dating_WebAPI.Controllers
                     Email = registerDTO.Email,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
                     PasswordSalt = hmac.Key,
-                    SexualId = registerDTO.SexualId,
-                    FavorId = registerDTO.FavorId,
+                    SexualId = int.Parse(registerDTO.SexualId),
+                    FavorId = int.Parse(registerDTO.FavorId),
                 };
                 _dataContext.Add(user);
                 await _dataContext.SaveChangesAsync();
@@ -84,6 +85,14 @@ namespace Dating_WebAPI.Controllers
                     Token = _tokenServices.CreateToken(user)
                 };
             }
+        }
+
+        //允許未經驗證授權也可以存取
+        [AllowAnonymous]
+        [HttpGet("{GetFavor}")]
+        public async Task<ActionResult<IEnumerable<Favor>>> GetFavor()
+        {
+            return await _dataContext.Favor.ToListAsync();
         }
 
         private async Task<bool> UserExists(string data)

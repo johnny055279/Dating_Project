@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -8,25 +9,25 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit {
+  carouselInterval: number = 3000;
   registerMode: boolean = true;
-  users: any;
+  favors: any;
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    this.getUsers();
+    this.getFavors();
   }
 
   registerToggle(){
     this.registerMode = !this.registerMode;
   }
 
-  getUsers(){
-    this.http.get('https://localhost:5001/api/users').subscribe(users => this.users = users);
-  }
-
   cancelRegisterMode(event: boolean){
     this.registerMode = !event;
   }
 
-
+  getFavors(){
+    this.http.get<any>('https://localhost:5001/api/account/GetFavor').subscribe(response=>
+    this.favors = response);
+  }
 }

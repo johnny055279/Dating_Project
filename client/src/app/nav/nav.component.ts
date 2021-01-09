@@ -3,6 +3,10 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { AccountService } from '../_services/account.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertComponent } from 'ngx-bootstrap/alert';
+import { Observable } from 'rxjs';
+import { User } from '../_models/user';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -34,7 +38,8 @@ export class NavComponent implements OnInit {
   constructor(
     // 如果要在網頁呼叫，就必須變成public
     public accountService: AccountService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private router: Router,
     ) { }
 
   ngOnInit(): void {}
@@ -42,14 +47,13 @@ export class NavComponent implements OnInit {
   login(){
     this.accountService.login(this.model).subscribe(response => {
       this.modalRef.hide();
-    },
-    error =>{
-      this.addAlert();
+      this.router.navigateByUrl('/members');
     })
   }
 
   logout(){
     this.accountService.logout();
+    this.router.navigateByUrl('/');
   }
 
   search(){
@@ -64,15 +68,11 @@ export class NavComponent implements OnInit {
     this.alerts.push({
       type: 'custom',
       msg: `帳號或密碼錯誤，請重新登入喔!`,
-      timeout: 200000
+      timeout: 2000
     });
   }
  
   closeAlert(dismissedAlert: AlertComponent): void {
     this.alerts = this.alerts.filter(alert => alert !== dismissedAlert);
-  }
-
-  toggleMenu(){
-   
   }
 }

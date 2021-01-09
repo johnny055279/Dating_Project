@@ -1,55 +1,27 @@
-<div class="container mt-5" *ngIf="registerMode">
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel" data-bs-slide-to="1" class=""></li>
-          <li data-bs-target="#myCarousel" data-bs-slide-to="2" class=""></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-    
-            <div class="container">
-              <div class="carousel-caption text-start">
-                <h1>你正為錢煩惱嗎?</h1>
-                <p>成為我們的會員，幫你找到人生的目標、感情的巔峰!!</p>
-                <p *ngIf="registerMode"><a class="btn btn-lg btn-primary" role="button" (click)="registerToggle()">立即註冊</a></p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="carousel-item">
-            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-    
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>女人，永遠會是一個男人的家。</h1>
-                <p>即使青春不再，她們依然是個賢慧的女人。</p>
-                <p><a class="btn btn-lg btn-primary" href="#" role="button">立即配對</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-    
-            <div class="container">
-              <div class="carousel-caption text-end">
-                <h1>支持我們</h1>
-                <p>如果您因為本服務而感到快樂，請贊助我們一杯咖啡!!</p>
-                <p><a class="btn btn-lg btn-primary" href="#" role="button">贊助</a></p>
-              </div>
-            </div>
-          </div>
+<div class="container mt-5" *ngIf="registerMode">  
+    <carousel [isAnimated]="true" [interval]="carouselInterval" [noPause]="false">
+      <slide>
+        <div class="text-center py-5 bg-dark text-white">
+          <h1>你正為錢煩惱嗎?</h1>
+          <p>成為我們的會員，幫你找到人生的目標、感情的巔峰!!</p>
+          <p *ngIf="registerMode"><a class="btn btn-lg btn-primary" role="button" (click)="registerToggle()">立即註冊</a></p>
         </div>
-        <a class="carousel-control-prev" href="#myCarousel" role="button" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#myCarousel" role="button" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </a>
-    </div>
+      </slide>
+      <slide>
+        <div class="text-center py-5 bg-dark text-white">
+        <h1>女人，永遠會是一個男人的家。</h1>
+        <p>即使青春不再，她們依然是個賢慧的女人。</p>
+        <p><a class="btn btn-lg btn-primary" href="#" role="button">立即配對</a></p>
+      </div>
+      </slide>
+      <slide>
+        <div class="text-center py-5 bg-dark text-white">
+        <h1>支持我們</h1>
+        <p>如果您因為本服務而感到快樂，請贊助我們一杯咖啡!!</p>
+        <p><a class="btn btn-lg btn-primary" href="#" role="button">贊助</a></p>
+      </div>
+      </slide>
+    </carousel>
     <div class="container marketing">
       <div class="row shadow-sm">
         <div class="col-lg-4">
@@ -114,7 +86,7 @@
 </div>
 <div class="container mt-5" *ngIf="!registerMode" id="register-form">
   <!-- 設定需要傳入child的值，[]代表輸入，()代表輸出，值的部分則對應parent的參數 -->
-  <app-register [usersFromHomeComponent] = "users" (cancelRegister)="cancelRegisterMode($event)"></app-register>
+  <app-register [favorsFromHomeComponent] = "favors" (cancelRegister)="cancelRegisterMode($event)"></app-register>
 </div>
 <div class="container">
   <footer class="container">

@@ -1,6 +1,7 @@
 using Dating_WebAPI.Data;
 using Dating_WebAPI.Extensions;
 using Dating_WebAPI.Interfaces;
+using Dating_WebAPI.Middleware;
 using Dating_WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +48,9 @@ namespace Dating_WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Middleware¼g¦b³o¸Ì
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

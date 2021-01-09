@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { Favors } from '../_models/favors';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-register',
@@ -8,21 +11,23 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class RegisterComponent implements OnInit {
   model: any = {};
   // 輸入屬性，通常為接收數據資料，也就是就是讓Parent將資料傳送到Child中使用。寫在Child裡面。
-  @Input() usersFromHomeComponent: any = {};
+  @Input() favorsFromHomeComponent: any = {};
   // 輸出屬性，通常提供事件給外部呼叫回傳使用，也就是讓Child將資料傳回Parent中使用。寫在Child裡面。
   @Output() cancelRegister = new EventEmitter();
 
-  constructor() { }
+  constructor(private accountService: AccountService, private toastr: ToastrService){}
 
   ngOnInit(): void {
   }
 
   register(){
-    console.log(this.model)
-  }
+    this.accountService.register(this.model).subscribe((reponse) => 
+    {
+      this.cancel();
+    })}
 
   cancel(){
     this.cancelRegister.emit(false);
   }
-
+  
 }
