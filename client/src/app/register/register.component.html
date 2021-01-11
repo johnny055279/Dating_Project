@@ -11,19 +11,44 @@
     <div class="form-group">
         <input class="form-control" type="email" name="email" [(ngModel)]="model.email" placeholder="信箱"/>
     </div>
-    <div class="form-group">
-        <select name="favor" class="form-control" [(ngModel)] = "model.SexualId">
-            <option selected disabled>性別</option>
-            <option value="1">男性</option>
-            <option value="2">女性</option>
-            <option value="3">中性</option>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">性別</span>
+        </div>
+        <select name="favor" class="form-control" [(ngModel)]="model.Gander">
+            <option selected value="Male">男性</option>
+            <option value="Female">女性</option>
         </select>
     </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">生日</span>
+        </div>
+        <input type="date" class="form-control" name="Birthday" [(ngModel)]="model.Birthday"/>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">暱稱</span>
+        </div>
+        <input type="text" class="form-control" name="Birthday" [(ngModel)]="model.NickName"/>
+    </div>
+
     <div class="form-group">
-        <select name="favor" class="form-control" [(ngModel)] = "model.FavorId">
-            <option selected disabled>請選擇喜歡的類型</option>
-            <option *ngFor="let favors of favorsFromHomeComponent" [value]="favors.favorId">{{favors.favorType}}</option>
-        </select>
+        <input class="form-control" name="LookingFor" [(ngModel)]="model.LookingFor"  placeholder="尋找的對象"/>
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">興趣愛好</span>
+        </div>
+        <textarea class="form-control" name="Introduction" [(ngModel)]="model.Interests"></textarea>
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">自我介紹</span>
+        </div>
+        <textarea class="form-control" name="Introduction" [(ngModel)]="model.Introduction"></textarea>
     </div>
     <div class="form-group text-center">
         <button class="btn btn-success mr-2" type="submit">註冊</button>

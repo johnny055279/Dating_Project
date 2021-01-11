@@ -44,9 +44,7 @@ namespace Dating_WebAPI.Controllers
                     UserName = registerDTO.UserName,
                     Email = registerDTO.Email,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                    PasswordSalt = hmac.Key,
-                    SexualId = int.Parse(registerDTO.SexualId),
-                    FavorId = int.Parse(registerDTO.FavorId),
+                    PasswordSalt = hmac.Key
                 };
                 _dataContext.Add(user);
                 await _dataContext.SaveChangesAsync();
@@ -85,14 +83,6 @@ namespace Dating_WebAPI.Controllers
                     Token = _tokenServices.CreateToken(user)
                 };
             }
-        }
-
-        //允許未經驗證授權也可以存取
-        [AllowAnonymous]
-        [HttpGet("{GetFavor}")]
-        public async Task<ActionResult<IEnumerable<Favor>>> GetFavor()
-        {
-            return await _dataContext.Favor.ToListAsync();
         }
 
         private async Task<bool> UserExists(string data)

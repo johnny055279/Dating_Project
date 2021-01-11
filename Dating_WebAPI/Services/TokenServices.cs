@@ -30,8 +30,6 @@ namespace Dating_WebAPI.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Gender, user.SexualId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.FavorId.ToString())
             };
             var creds = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor

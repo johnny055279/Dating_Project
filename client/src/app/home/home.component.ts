@@ -11,11 +11,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class HomeComponent implements OnInit {
   carouselInterval: number = 3000;
   registerMode: boolean = true;
-  favors: any;
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    this.getFavors();
   }
 
   registerToggle(){
@@ -24,10 +22,5 @@ export class HomeComponent implements OnInit {
 
   cancelRegisterMode(event: boolean){
     this.registerMode = !event;
-  }
-
-  getFavors(){
-    this.http.get<any>('https://localhost:5001/api/account/GetFavor').subscribe(response=>
-    this.favors = response);
   }
 }

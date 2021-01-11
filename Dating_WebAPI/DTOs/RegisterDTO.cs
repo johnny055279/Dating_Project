@@ -10,6 +10,7 @@ namespace Dating_WebAPI.DTOs
     public class RegisterDTO
     {
         [Required]
+        [StringLength(20)]
         public string UserName { get; set; }
 
         [Required]
@@ -20,9 +21,22 @@ namespace Dating_WebAPI.DTOs
         public string Email { get; set; }
 
         [Required]
-        public string SexualId { get; set; }
+        [StringLength(20)]
+        public string NickName { get; set; }
 
         [Required]
-        public string FavorId { get; set; }
+        public DateTime Birthday { get; set; }
+
+        [StringLength(100)]
+        [Required]
+        public string LookingFor { get; set; }
+
+        [StringLength(100)]
+        [Required]
+        public string Interests { get; set; }
+
+        [StringLength(200)]
+        [Required]
+        public string Introduction { get; set; }
     }
 }

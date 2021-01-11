@@ -86,7 +86,7 @@
 </div>
 <div class="container mt-5" *ngIf="!registerMode" id="register-form">
   <!-- 設定需要傳入child的值，[]代表輸入，()代表輸出，值的部分則對應parent的參數 -->
-  <app-register [favorsFromHomeComponent] = "favors" (cancelRegister)="cancelRegisterMode($event)"></app-register>
+  <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
 </div>
 <div class="container">
   <footer class="container">

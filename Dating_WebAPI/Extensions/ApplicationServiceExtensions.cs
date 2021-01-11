@@ -1,4 +1,6 @@
-﻿using Dating_WebAPI.Data;
+﻿using AutoMapper;
+using Dating_WebAPI.Data;
+using Dating_WebAPI.Helpers;
 using Dating_WebAPI.Interfaces;
 using Dating_WebAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,12 @@ namespace Dating_WebAPI.Extensions
         {
             //設定LifeTime只存在一個request，在同一個Requset中，不論是在哪邊被注入，都是同樣的實例。
             services.AddScoped<ITokenServices, TokenServices>();
+
+            //加入UserRepository
+            services.AddScoped<IUserRepository, UseRepository>();
+
+            //加入AutoMapper，參數內帶入Profiles的位址，這裡我們只創建一個Profiles
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             services.AddDbContext<DataContext>(option =>
             {

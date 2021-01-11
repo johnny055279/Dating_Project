@@ -15,8 +15,5 @@ namespace Dating_WebAPI.Data
 
         // 名字要跟DataBase裡面一樣，不然會抓不到!!
         public DbSet<AppUser> Users { get; set; }
-
-        public DbSet<Favor> Favor { get; set; }
-        public DbSet<Sexual> Sexual { get; set; }
     }
 }
