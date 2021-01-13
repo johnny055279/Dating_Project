@@ -18,8 +18,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     // 使用children可以統一規則，例如AuthGuard
     children: [
-      {path: 'memebers', component: MemberListComponent},
-      {path: 'members/:id', component: MemberDetailComponent},
+      {path: 'members', component: MemberListComponent},
+      {path: 'members/:username', component: MemberDetailComponent},
       {path: 'lists', component: ListsComponent},
       {path: 'messages', component: MessagesComponent},
     ]

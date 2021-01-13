@@ -6,6 +6,9 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ToastrModule } from 'ngx-toastr';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { HttpClientModule} from '@angular/common/http';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 
 
 
@@ -21,6 +24,9 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }),
+    TabsModule.forRoot(),
+    HttpClientModule,
+    NgxGalleryModule
   ],
   // 要export才能用
   exports: [
@@ -29,7 +35,10 @@ import { ToastrModule } from 'ngx-toastr';
     AlertModule,
     CollapseModule,
     CarouselModule,
-    ToastrModule
+    ToastrModule,
+    TabsModule,
+    HttpClientModule,
+    NgxGalleryModule
   ]
 })
 export class SharedModule { }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 
 // 可使此服務注入到其他的服務或是組件中
@@ -12,7 +13,7 @@ import { User } from '../_models/user';
 export class AccountService {
 
   // make a request to API
-  baseurl = 'https://localhost:5001/api/';
+  baseurl = environment.apiUrl;
 
   // create a Observable object
   // Observable物件內先寫好整個資料流的流程，以便未來訂閱 (subscribe) 時可以依照這資料流程進行處理。
