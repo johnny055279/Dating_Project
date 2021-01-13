@@ -20,7 +20,7 @@ namespace Dating_WebAPI.Helpers
         public AutoMapperProfiles()
         {
             // ForMember代表設定哪個屬性我們想要控制
-            // 第一個參數是我們想控制的屬性，第二個參數擺我們要Mapping的過來的地方
+            // 第一個參數是我們想控制的屬性，第二個參數擺我們要Mapping的過去的地方
             CreateMap<AppUser, MemberDTO>().ForMember(
                 destination => destination.PhotoUrl,
                 option => option.MapFrom(
@@ -28,6 +28,8 @@ namespace Dating_WebAPI.Helpers
                 .ForMember(destination => destination.Age, option => option.MapFrom(n => n.Birthday.CalculateAge()));
 
             CreateMap<Photo, PhotoDTO>();
+
+            CreateMap<MemberUpdateDTO, AppUser>();
         }
     }
 }

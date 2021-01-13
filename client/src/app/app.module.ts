@@ -22,6 +22,8 @@ import { Page404Component } from './errors/page404/page404.component';
 import { Page500Component } from './errors/page500/page500.component';
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { MemeberEditComponent } from './members/memeber-edit/memeber-edit.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 @NgModule({
   // 屬於此NgModule的Component、Directive與Pipe皆放置於此。
@@ -37,7 +39,8 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
     ErrorsComponent,
     Page404Component,
     Page500Component,
-    MemberCardComponent
+    MemberCardComponent,
+    MemeberEditComponent
   ],
 
   // 此NgModule需要使用、依賴的其他NgModule皆放置於此。
@@ -53,7 +56,8 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
   // 也可以將 Service 直接放置在 Component 的 Metadata 裡的 providers
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   // 在此設置的是應用程式通常稱之為Root Component（根元件），而且只有Root Module才要設置此屬性。
   bootstrap: [AppComponent]

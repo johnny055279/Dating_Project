@@ -3,10 +3,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { AccountService } from '../_services/account.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertComponent } from 'ngx-bootstrap/alert';
-import { Observable } from 'rxjs';
-import { User } from '../_models/user';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',

@@ -9,6 +9,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { HttpClientModule} from '@angular/common/http';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 
@@ -26,7 +27,8 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
     }),
     TabsModule.forRoot(),
     HttpClientModule,
-    NgxGalleryModule
+    NgxGalleryModule,
+    NgxSpinnerModule
   ],
   // 要export才能用
   exports: [
@@ -38,7 +40,8 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
     ToastrModule,
     TabsModule,
     HttpClientModule,
-    NgxGalleryModule
+    NgxGalleryModule,
+    NgxSpinnerModule
   ]
 })
 export class SharedModule { }
