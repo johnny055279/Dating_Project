@@ -19,6 +19,11 @@ namespace Dating_WebAPI.Extensions
         // 擴展方法應為靜態
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // 將appsettings.json的資料抓過來變成強行別物件。
+            services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
+
+            services.AddScoped<IPhotosServices, PhotoServices>();
+
             //設定LifeTime只存在一個request，在同一個Requset中，不論是在哪邊被注入，都是同樣的實例。
             services.AddScoped<ITokenServices, TokenServices>();
 

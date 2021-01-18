@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators'
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, take } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
+import { Member } from '../_models/member';
 import { User } from '../_models/user';
+import { MembersService } from './members.service';
 
 // 可使此服務注入到其他的服務或是組件中
 @Injectable({
@@ -23,44 +25,44 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User>(1);
   // Observable物件的變數名最後面+上$
   currentUser$ = this.currentUserSource.asObservable();
-  favors: any;
+  member!: Observable<Member>;
+  user!: User;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private membersService: MembersService) { }
 
   login(model: any){
     return this.http.post<User>(this.baseurl + 'account/login', model).pipe(
       // 從定義的interface接資料，不再是使用any。
       // 在post已經定義資料型態後，其實這裡就已經知道response是User型態了，不用在指定也沒關係。
-      map((response) =>{
-        if(response){
-          // 將使用者資訊存在localStorage，可以當作session使用。
-          localStorage.setItem('user', JSON.stringify(response));
-          // 把東西送給訂閱者
-          this.currentUserSource.next(response);
-        }
-      }))
+      map((user: User) =>{
+        if(user){
+         this.setCurrentUser(user);
+      }
+    }))
   }
 
   // 建立Helper
   setCurrentUser(user: User){
+    // 將使用者資訊存在localStorage，可以當作session使用。
+    localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
 
   logout(){
     localStorage.removeItem('user');
     this.currentUserSource.next(undefined);
-    console.log(this.currentUser$)
   }
 
   register(model: any){
     return this.http.post<any>(this.baseurl + 'account/register', model).pipe(
       map(user=>{
         localStorage.setItem('user', JSON.stringify(user));
-        this.currentUserSource.next(user);
+
+        this.currentUser$.pipe(take(1)).subscribe(user=> this.user = user);
+        this.membersService.getMember(user.userName).pipe(map(member=>{
+          this.membersService.members.push(member);
+        }))
       })
     )
   }
-
-  
-
 }

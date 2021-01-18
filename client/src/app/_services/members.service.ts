@@ -11,6 +11,10 @@ import { Member } from '../_models/member';
 export class MembersService {
 
   baseUrl = environment.apiUrl;
+
+  // services在app關閉之前都會存在，所以很適合將查詢過構的資料先存在這裡。
+  // 這樣在擷取資料的時候，就不必每次都呼叫一次API。
+  // 但是由於資料已經存在了，以此例如這裡有人註冊的時候，就必須要更新members，否則不會有變化直到重啟app。
   members: Member[] = [];
   constructor(private http: HttpClient) { }
 
@@ -22,6 +26,7 @@ export class MembersService {
      // request傳到後端的時候會檢查認證，所以要傳一個header，這裡會利用jwt.interceptor.ts來幫助我們
     return this.http.get<Member[]>(this.baseUrl + 'users').pipe(map(members => {
       this.members = members;
+      console.log(members);
       return members;
     }))
   }
@@ -41,4 +46,14 @@ export class MembersService {
       })
     );
   }
+
+  setMainPhoto(photoId: number){
+    // 因為是put request，我們沒有需要在body家東西，因此給空值就好。
+    return this.http.put(this.baseUrl + 'users/setMainPhoto/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number){
+    return this.http.delete(this.baseUrl + 'users/deletePhoto/' + photoId, {});
+  }
+
 }

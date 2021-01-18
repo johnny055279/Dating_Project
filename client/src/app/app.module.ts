@@ -24,6 +24,7 @@ import { MemberCardComponent } from './members/member-card/member-card.component
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemeberEditComponent } from './members/memeber-edit/memeber-edit.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 
 @NgModule({
   // 屬於此NgModule的Component、Directive與Pipe皆放置於此。
@@ -40,7 +41,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     Page404Component,
     Page500Component,
     MemberCardComponent,
-    MemeberEditComponent
+    MemeberEditComponent,
+    PhotoEditorComponent
   ],
 
   // 此NgModule需要使用、依賴的其他NgModule皆放置於此。

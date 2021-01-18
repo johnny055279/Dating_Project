@@ -52,7 +52,7 @@ namespace Dating_WebAPI.Controllers
                 return new UserDTO
                 {
                     UserName = user.UserName,
-                    Token = _tokenServices.CreateToken(user)
+                    Token = _tokenServices.CreateToken(user),
                 };
             }
         }
@@ -60,7 +60,8 @@ namespace Dating_WebAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
         {
-            AppUser user = await _dataContext.Users.SingleOrDefaultAsync(n => n.UserName == loginDTO.UserName);
+            // 如果沒有Include Photos，則在return PhotoUrl的時候會因為找不到路徑而報Null Exception。
+            AppUser user = await _dataContext.Users.Include(n => n.Photos).SingleOrDefaultAsync(n => n.UserName == loginDTO.UserName);
 
             if (user == null)
             {
@@ -80,7 +81,9 @@ namespace Dating_WebAPI.Controllers
                 return new UserDTO
                 {
                     UserName = user.UserName,
-                    Token = _tokenServices.CreateToken(user)
+                    Token = _tokenServices.CreateToken(user),
+                    // 記得要先Include Photo不然找不到。
+                    PhotoUrl = user.Photos.FirstOrDefault(n => n.IsMain)?.Url
                 };
             }
         }

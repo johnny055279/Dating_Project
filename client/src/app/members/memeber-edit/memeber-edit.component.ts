@@ -13,6 +13,9 @@ import { MembersService } from 'src/app/_services/members.service';
   styleUrls: ['./memeber-edit.component.css']
 })
 export class MemeberEditComponent implements OnInit {
+
+  // 於配置一個檢視查詢。 變更檢測器會在檢視的 DOM 中查詢能匹配上該選擇器的第一個元素或指令。
+  // 如果檢視的 DOM 發生了變化，出現了匹配該選擇器的新的子節點，該屬性就會被更新。
   @ViewChild("editForm") editForm!: NgForm;
   member!: Member;
   user!: User;
@@ -27,7 +30,7 @@ export class MemeberEditComponent implements OnInit {
   constructor(
     private accountService: AccountService, 
     private memberService: MembersService, 
-    private toastr: ToastrService) { 
+    private toastr: ToastrService,) { 
     // 因為currentUser$是Observiable，不能直接對其作業，所以要再這裡先把它拉出來。
     this.accountService.currentUser$.pipe(take(1)).subscribe(user=> this.user = user);
   }
