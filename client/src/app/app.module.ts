@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import{ HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
@@ -25,6 +25,8 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemeberEditComponent } from './members/memeber-edit/memeber-edit.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import { TextInputComponent } from './_forms/text-input/text-input.component';
+import { DateInputComponent } from './_forms/date-input/date-input.component';
 
 @NgModule({
   // 屬於此NgModule的Component、Directive與Pipe皆放置於此。
@@ -42,7 +44,9 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
     Page500Component,
     MemberCardComponent,
     MemeberEditComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    TextInputComponent,
+    DateInputComponent
   ],
 
   // 此NgModule需要使用、依賴的其他NgModule皆放置於此。
@@ -52,7 +56,8 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   // 可以被整個應用程式中的任何部分被使用的 Service 皆放置於此。
   // 也可以將 Service 直接放置在 Component 的 Metadata 裡的 providers

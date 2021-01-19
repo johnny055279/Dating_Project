@@ -11,7 +11,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { FileUploadModule } from 'ng2-file-upload';
-
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'
 
 
 @NgModule({
@@ -30,7 +30,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     HttpClientModule,
     NgxGalleryModule,
     NgxSpinnerModule,
-    FileUploadModule
+    FileUploadModule,
+    BsDatepickerModule.forRoot()
   ],
   // 要export才能用
   exports: [
@@ -44,7 +45,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     HttpClientModule,
     NgxGalleryModule,
     NgxSpinnerModule,
-    FileUploadModule
+    FileUploadModule,
+    BsDatepickerModule
   ]
 })
 export class SharedModule { }

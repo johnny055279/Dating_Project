@@ -38,5 +38,11 @@ namespace Dating_WebAPI.DTOs
         [StringLength(200)]
         [Required]
         public string Introduction { get; set; }
+
+        [Required]
+        public string City { get; set; }
+
+        [Required]
+        public string Country { get; set; }
     }
 }

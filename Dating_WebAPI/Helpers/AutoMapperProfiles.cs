@@ -30,6 +30,8 @@ namespace Dating_WebAPI.Helpers
             CreateMap<Photo, PhotoDTO>();
 
             CreateMap<MemberUpdateDTO, AppUser>();
+
+            CreateMap<RegisterDTO, AppUser>();
         }
     }
 }

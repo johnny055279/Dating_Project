@@ -1,57 +1,26 @@
-<form #registeForm="ngForm" (submit)="register()" autocomplete="off">
+<form [formGroup]="registerForm" (submit)="register() && registerForm.valid" autocomplete="off">
     <h2 class="text-center text-primary">歡迎註冊</h2>
     <hr/>
+    <app-text-input [formControl]='registerForm.controls["userName"]' [label]='"使用者帳號"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["password"]' [label]='"使用者密碼"' [type]='"password"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["confirmPassword"]' [label]='"確認密碼"' [type]='"password"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["email"]' [label]='"使用者信箱"' [type]='"email"'></app-text-input>
     <div class="form-group">
-        <!-- [(ngModel)]可以記錄使用者輸入的資訊，以name當作指標。 -->
-        <input class="form-control" type="text" name="username" [(ngModel)]="model.username" placeholder="帳號"/>
+        <label class="control-label" style="margin-right: 10px;">我是：</label>
+        <label class="label-inline"><input type="radio" value="male" formControlName="gender"/>男生</label>
+        <label class="label-inline"><input type="radio" value="female" formControlName="gender" class="ml-3"/>女生</label>
     </div>
-    <div class="form-group">
-        <input class="form-control" type="password" name="password" [(ngModel)]="model.password" placeholder="密碼"/>
-    </div>
-    <div class="form-group">
-        <input class="form-control" type="email" name="email" [(ngModel)]="model.email" placeholder="信箱"/>
-    </div>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">性別</span>
-        </div>
-        <select name="favor" class="form-control" [(ngModel)]="model.Gander">
-            <option selected value="Male">男性</option>
-            <option value="Female">女性</option>
-        </select>
-    </div>
-
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">生日</span>
-        </div>
-        <input type="date" class="form-control" name="Birthday" [(ngModel)]="model.Birthday"/>
-    </div>
-
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">暱稱</span>
-        </div>
-        <input type="text" class="form-control" name="Birthday" [(ngModel)]="model.NickName"/>
-    </div>
-
-    <div class="form-group">
-        <input class="form-control" name="LookingFor" [(ngModel)]="model.LookingFor"  placeholder="尋找的對象"/>
-    </div>
-    <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">興趣愛好</span>
-        </div>
-        <textarea class="form-control" name="Introduction" [(ngModel)]="model.Interests"></textarea>
-    </div>
-    <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">自我介紹</span>
-        </div>
-        <textarea class="form-control" name="Introduction" [(ngModel)]="model.Introduction"></textarea>
-    </div>
+    <app-date-input [formControl]='registerForm.controls["birthday"]' [label]='"生日"' [maxDate]='maxDate'></app-date-input>
+    <app-text-input [formControl]='registerForm.controls["nickName"]' [label]='"暱稱"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["city"]' [label]='"居住城市"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["country"]' [label]='"國籍"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["lookingFor"]' [label]='"尋找對象"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["interests"]' [label]='"興趣"'></app-text-input>
+    <app-text-input [formControl]='registerForm.controls["introduction"]' [label]='"介紹自己"'></app-text-input>
     <div class="form-group text-center">
-        <button class="btn btn-success mr-2" type="submit">註冊</button>
+        <button [disabled]='!registerForm.valid' class="btn btn-success mr-2" type="submit">註冊</button>
         <button class="btn btn-danger mr-2" type="button" (click)="cancel()">取消</button>
     </div>
 </form>
+
+

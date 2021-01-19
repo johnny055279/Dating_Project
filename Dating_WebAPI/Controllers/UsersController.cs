@@ -130,7 +130,7 @@ namespace Dating_WebAPI.Controllers
 
             var photo = user.Photos.FirstOrDefault(n => n.Id == photoId);
 
-            if (photo != null) return NotFound();
+            if (photo == null) return NotFound();
 
             if (photo.IsMain) return BadRequest("你不能刪除主要的照片");
 

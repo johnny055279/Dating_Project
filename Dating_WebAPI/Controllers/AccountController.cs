@@ -1,4 +1,5 @@
-﻿using Dating_WebAPI.Data;
+﻿using AutoMapper;
+using Dating_WebAPI.Data;
 using Dating_WebAPI.DTOs;
 using Dating_WebAPI.Entities;
 using Dating_WebAPI.Interfaces;
@@ -19,11 +20,13 @@ namespace Dating_WebAPI.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly ITokenServices _tokenServices;
+        private readonly IMapper _mapper;
 
-        public AccountController(DataContext dataContext, ITokenServices tokenServices)
+        public AccountController(DataContext dataContext, ITokenServices tokenServices, IMapper mapper)
         {
             this._dataContext = dataContext;
             this._tokenServices = tokenServices;
+            this._mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -36,16 +39,15 @@ namespace Dating_WebAPI.Controllers
             }
             else
             {
+                var user = _mapper.Map<AppUser>(registerDTO);
+
                 // 用完即dispose
                 using HMACSHA512 hmac = new HMACSHA512();
 
-                AppUser user = new AppUser
-                {
-                    UserName = registerDTO.UserName,
-                    Email = registerDTO.Email,
-                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                    PasswordSalt = hmac.Key
-                };
+                user.UserName = registerDTO.UserName.ToLower();
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+                user.PasswordSalt = hmac.Key;
+
                 _dataContext.Add(user);
                 await _dataContext.SaveChangesAsync();
 
@@ -53,6 +55,7 @@ namespace Dating_WebAPI.Controllers
                 {
                     UserName = user.UserName,
                     Token = _tokenServices.CreateToken(user),
+                    NickName = user.NickName
                 };
             }
         }
@@ -83,7 +86,8 @@ namespace Dating_WebAPI.Controllers
                     UserName = user.UserName,
                     Token = _tokenServices.CreateToken(user),
                     // 記得要先Include Photo不然找不到。
-                    PhotoUrl = user.Photos.FirstOrDefault(n => n.IsMain)?.Url
+                    PhotoUrl = user.Photos.FirstOrDefault(n => n.IsMain)?.Url,
+                    NickName = user.NickName
                 };
             }
         }
