@@ -1,6 +1,7 @@
 ﻿using Dating_WebAPI.DTOs;
 using Dating_WebAPI.Entities;
 using Dating_WebAPI.Extensions;
+using Dating_WebAPI.Helpers;
 using Dating_WebAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,9 +28,9 @@ namespace Dating_WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers(UserParams userParams)
         {
-            var users = await _userRepository.GetMembersAsync();
+            var users = await _userRepository.GetMembersAsync(userParams);
 
             // 不加Ok會有形別上的錯誤。
             return Ok(users);
