@@ -24,7 +24,7 @@ export class MembersService {
  
   getMembers(userParams: UserParams){
 
-    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize, userParams.minAge, userParams.maxAge, userParams.gender);
+    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize, userParams.minAge, userParams.maxAge, userParams.gender, userParams.orderBy);
 
     // 想得到 HTTP 狀態碼、HTTP 回應標頭之類的資訊，就要特別加入 options 參數。
     // 這裡我們要抓的東西是response的body，並且運用params去做篩選
@@ -48,7 +48,7 @@ export class MembersService {
     }));
   }
 
-  private getPaginationHeaders(pageNumber: number, pageSize: number, minAge: number, maxAge: number, gender: string){
+  private getPaginationHeaders(pageNumber: number, pageSize: number, minAge: number, maxAge: number, gender: string, orderBy: string){
     // HttpParams可以序列化我們的QueryString
     let params = new HttpParams();
 
@@ -58,6 +58,7 @@ export class MembersService {
     params = params.append('minAge', minAge.toString());
     params = params.append('maxAge', maxAge.toString());
     params = params.append('gender', gender.toString());
+    params = params.append('orderBy', orderBy);
 
     return params;
   }
