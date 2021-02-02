@@ -25,7 +25,7 @@
       
       <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
         <img class="img" [src]="user.photoUrl || './assets/Images/user.png'" [alt]="user.userName" />
-        <a class="btn btn-primary dropdown-toggle ml-2" dropdownToggle aria-controls="dropdown-animated">歡迎{{user.userName}}</a>
+        <a class="btn btn-primary dropdown-toggle ml-2" dropdownToggle aria-controls="dropdown-animated">歡迎：{{user.nickName}}</a>
         <div class="dropdown-menu mt-2" *dropdownMenu>
           <a class="dropdown-item" routerLink="member/edit">個人資料</a>
           <div class="dropdown-divider"></div>

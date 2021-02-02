@@ -73,6 +73,19 @@ namespace Dating_WebAPI.Data
             q = q.Where(n => n.UserName != userParams.CurrentUserName);
             q = q.Where(n => n.Gender == userParams.Gender);
 
+
+            var minBirthday = DateTime.Today.AddYears(-userParams.MaxAge -1);
+            var maxBirthday = DateTime.Today.AddYears(-userParams.MinAge);
+
+            q = q.Where(n => n.Birthday >=minBirthday && n.Birthday <= maxBirthday);
+
+            q = userParams.OrderBy switch
+            {
+                "created" => q.OrderByDescending(n => n.AccountCreateTime),
+                // _ 代表Default
+                _ => q.OrderByDescending(n => n.LastLoginTime)
+            };
+
             return await PageList<MemberDTO>.CreateAsync(
                 q.ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).AsNoTracking(), 
                 userParams.PageNumber, 

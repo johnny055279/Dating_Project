@@ -55,7 +55,8 @@ namespace Dating_WebAPI.Controllers
                 {
                     UserName = user.UserName,
                     Token = _tokenServices.CreateToken(user),
-                    NickName = user.NickName
+                    NickName = user.NickName,
+                    Gender = user.Gender
                 };
             }
         }
@@ -87,7 +88,8 @@ namespace Dating_WebAPI.Controllers
                     Token = _tokenServices.CreateToken(user),
                     // 記得要先Include Photo不然找不到。
                     PhotoUrl = user.Photos.FirstOrDefault(n => n.IsMain)?.Url,
-                    NickName = user.NickName
+                    NickName = user.NickName,
+                    Gender = user.Gender
                 };
             }
         }

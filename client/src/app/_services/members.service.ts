@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
 import { PaginatedResult } from '../_models/pagination';
+import { UserParams } from '../_models/userParams';
 
 @Injectable({
   providedIn: 'root'
@@ -17,34 +18,48 @@ export class MembersService {
   // 這樣在擷取資料的時候，就不必每次都呼叫一次API。
   // 但是由於資料已經存在了，以此例如這裡有人註冊的時候，就必須要更新members，否則不會有變化直到重啟app。
   members: Member[] = [];
-  paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>();
+  
 
   constructor(private http: HttpClient) { }
  
-  getMembers(page?: number, itemPerPage?: number){
+  getMembers(userParams: UserParams){
 
-    // HttpParams可以序列化我們的QueryString
-    let params = new HttpParams();
-
-    if(params !== null && itemPerPage !== null){
-      // 因為是要傳QueryString，所以要toString
-      params = params.append('pageNumber', page.toString());
-      params = params.append('pageSize', itemPerPage.toString());
-    }
+    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize, userParams.minAge, userParams.maxAge, userParams.gender);
 
     // 想得到 HTTP 狀態碼、HTTP 回應標頭之類的資訊，就要特別加入 options 參數。
     // 這裡我們要抓的東西是response的body，並且運用params去做篩選
-    return this.http.get<Member[]>(this.baseUrl + 'users', {observe: 'response', params}).pipe(
+    return this.getPaginationResult<Member[]>(this.baseUrl + 'users', params)
+  }
+
+  private getPaginationResult<T>(url: string, params: HttpParams) {
+
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
+
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
       map(response => {
         // member array會塞在body
-        this.paginatedResult.result = response.body;
+        paginatedResult.result = response.body;
 
         // 取得由API提供的Header
-        if(response.headers.get('Pagination') !== null){
-          this.paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'))
+        if (response.headers.get('Pagination') !== null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
         }
-      return this.paginatedResult;
-    }))
+        return paginatedResult;
+    }));
+  }
+
+  private getPaginationHeaders(pageNumber: number, pageSize: number, minAge: number, maxAge: number, gender: string){
+    // HttpParams可以序列化我們的QueryString
+    let params = new HttpParams();
+
+    // 因為是要傳QueryString，所以要toString
+    params = params.append('pageNumber', pageNumber.toString());
+    params = params.append('pageSize', pageSize.toString());
+    params = params.append('minAge', minAge.toString());
+    params = params.append('maxAge', maxAge.toString());
+    params = params.append('gender', gender.toString());
+
+    return params;
   }
 
   getMember(username: string){

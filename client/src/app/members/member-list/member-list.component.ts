@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { Pagination } from 'src/app/_models/pagination';
+import { User } from 'src/app/_models/user';
+import { UserParams } from 'src/app/_models/userParams';
+import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
@@ -13,29 +16,41 @@ export class MemberListComponent implements OnInit {
 
   members!: Member[];
   pagination: Pagination;
-  pageNumber = 1;
-  pageSize = 5;
+  userParams: UserParams;
+  user: User;
+  genderList = [{value: 'male', display: '男性'},{value: 'female', display: '女性'}];
 
-  constructor(private memberServices: MembersService) { }
+  constructor(private memberServices: MembersService, private accountService: AccountService) { 
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user=>{
+      this.user = user;
+      this.userParams = new UserParams(user);
+    })
+  }
 
   ngOnInit(): void {
 
-    this.loadMember();
+    this.loadMembers();
 
   }
 
   
-  loadMember(){
+  loadMembers(){
+
     // 這裡是使用HttpResponse去取得資料，所以不用pipe
-    this.memberServices.getMembers(this.pageNumber, this.pageSize).subscribe(response=>{
+    this.memberServices.getMembers(this.userParams).subscribe(response=>{
       this.members = response.result;
       this.pagination = response.pagination;
     })
   }
 
   pageChange(event: any){
-    this.pageNumber = event.page;
-    this.loadMember();
+    this.userParams.pageNumber = event.page;
+    this.loadMembers();
+  }
+
+  resetFilters(){
+    this.userParams = new UserParams(this.user);
+    this.loadMembers();
   }
 
 }
