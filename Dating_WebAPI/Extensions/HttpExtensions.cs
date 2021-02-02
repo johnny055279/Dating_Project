@@ -14,8 +14,14 @@ namespace Dating_WebAPI.Extensions
         {
             var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, totalItems, totalPages);
 
+
+            // 讓Json變成小寫開頭
+            var option = new JsonSerializerOptions{
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
             // Add Custom Header
-            response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader));
+            response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader, option));
 
             // To make custom header available --> Access-Control-Expose-Headers must spell correct!
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");

@@ -27,10 +27,27 @@ namespace Dating_WebAPI.Controllers
             this._photosServices = photosServices;
         }
 
+
+        //如果是從QueryString來的就要加上[FromQuery]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers(UserParams userParams)
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
         {
+
+            // 設定初始值
+            var user = await _userRepository.GetUserByUserNameAsync(User.GetUserName());
+            
+            userParams.CurrentUserName = user.UserName;
+
+            if(string.IsNullOrEmpty(userParams.Gender)){
+                // 如果登入是女性，就顯示男性，反之亦然。
+                userParams.Gender = user.Gender == "male" ? "female" : "male";
+            }
+
             var users = await _userRepository.GetMembersAsync(userParams);
+            
+            Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+
+
 
             // 不加Ok會有形別上的錯誤。
             return Ok(users);

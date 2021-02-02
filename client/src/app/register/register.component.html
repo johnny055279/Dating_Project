@@ -1,4 +1,5 @@
-<form [formGroup]="registerForm" (submit)="register() && registerForm.valid" autocomplete="off">
+<!-- 先判Valid 再執行register() ??? -->
+<form [formGroup]="registerForm" (submit)="registerForm.valid && register() " autocomplete="off">
     <h2 class="text-center text-primary">歡迎註冊</h2>
     <hr/>
     <app-text-input [formControl]='registerForm.controls["userName"]' [label]='"使用者帳號"'></app-text-input>

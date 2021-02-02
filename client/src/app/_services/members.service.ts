@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
+import { PaginatedResult } from '../_models/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +17,33 @@ export class MembersService {
   // 這樣在擷取資料的時候，就不必每次都呼叫一次API。
   // 但是由於資料已經存在了，以此例如這裡有人註冊的時候，就必須要更新members，否則不會有變化直到重啟app。
   members: Member[] = [];
+  paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>();
+
   constructor(private http: HttpClient) { }
-
-
  
-  getMembers(){
-    // of代表建立一個Observable
-    if(this.members.length > 0) return of(this.members);
-     // request傳到後端的時候會檢查認證，所以要傳一個header，這裡會利用jwt.interceptor.ts來幫助我們
-    return this.http.get<Member[]>(this.baseUrl + 'users').pipe(map(members => {
-      this.members = members;
-      console.log(members);
-      return members;
+  getMembers(page?: number, itemPerPage?: number){
+
+    // HttpParams可以序列化我們的QueryString
+    let params = new HttpParams();
+
+    if(params !== null && itemPerPage !== null){
+      // 因為是要傳QueryString，所以要toString
+      params = params.append('pageNumber', page.toString());
+      params = params.append('pageSize', itemPerPage.toString());
+    }
+
+    // 想得到 HTTP 狀態碼、HTTP 回應標頭之類的資訊，就要特別加入 options 參數。
+    // 這裡我們要抓的東西是response的body，並且運用params去做篩選
+    return this.http.get<Member[]>(this.baseUrl + 'users', {observe: 'response', params}).pipe(
+      map(response => {
+        // member array會塞在body
+        this.paginatedResult.result = response.body;
+
+        // 取得由API提供的Header
+        if(response.headers.get('Pagination') !== null){
+          this.paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'))
+        }
+      return this.paginatedResult;
     }))
   }
 

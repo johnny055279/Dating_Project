@@ -66,9 +66,17 @@ namespace Dating_WebAPI.Data
             // AsNoTracking適用時機：　1.想要直接取得DB實際資料(忽略快取資料) 2.查詢結果僅供檢視(沒有異動需求)
             // 如果查詢的資料沒有異動需求，就可使用AsNoTracking方法將資料排除於追蹤清單中。
             // 另外由於查詢資料未列入追蹤，Entity Framework無須對此資料進行額外的處理，因此自然在查詢速度會有較佳的表現。
-            var q = _dataContext.Users.ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).AsNoTracking();
 
-            return await PageList<MemberDTO>.CreateAsync(q, userParams.PageNumber, userParams.PageSize);
+            var q = _dataContext.Users.AsQueryable();
+
+            // 先篩選條件，到最後才project出去
+            q = q.Where(n => n.UserName != userParams.CurrentUserName);
+            q = q.Where(n => n.Gender == userParams.Gender);
+
+            return await PageList<MemberDTO>.CreateAsync(
+                q.ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).AsNoTracking(), 
+                userParams.PageNumber, 
+                userParams.PageSize);
         }
     }
 }

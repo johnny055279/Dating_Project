@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Member } from 'src/app/_models/member';
+import { Pagination } from 'src/app/_models/pagination';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
@@ -10,13 +11,31 @@ import { MembersService } from 'src/app/_services/members.service';
 })
 export class MemberListComponent implements OnInit {
 
-  members$!: Observable<Member[]>;
+  members!: Member[];
+  pagination: Pagination;
+  pageNumber = 1;
+  pageSize = 5;
+
   constructor(private memberServices: MembersService) { }
 
   ngOnInit(): void {
 
-    this.members$ = this.memberServices.getMembers();
+    this.loadMember();
 
+  }
+
+  
+  loadMember(){
+    // 這裡是使用HttpResponse去取得資料，所以不用pipe
+    this.memberServices.getMembers(this.pageNumber, this.pageSize).subscribe(response=>{
+      this.members = response.result;
+      this.pagination = response.pagination;
+    })
+  }
+
+  pageChange(event: any){
+    this.pageNumber = event.page;
+    this.loadMember();
   }
 
 }
