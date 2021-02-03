@@ -25,10 +25,9 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User>(1);
   // Observable物件的變數名最後面+上$
   currentUser$ = this.currentUserSource.asObservable();
-  member!: Observable<Member>;
   user!: User;
 
-  constructor(private http: HttpClient, private membersService: MembersService) { }
+  constructor(private http: HttpClient) { }
 
   login(model: any){
     return this.http.post<User>(this.baseurl + 'account/login', model).pipe(
@@ -59,9 +58,6 @@ export class AccountService {
         localStorage.setItem('user', JSON.stringify(user));
 
         this.currentUser$.pipe(take(1)).subscribe(user=> this.user = user);
-        this.membersService.getMember(user.userName).pipe(map(member=>{
-          this.membersService.members.push(member);
-        }))
       })
     )
   }

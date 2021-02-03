@@ -3,18 +3,24 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
+import { strings as stringsTW } from 'ngx-timeago/language-strings/zh-TW';
+import { TimeagoIntl } from 'ngx-timeago';
+
 
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
-  styleUrls: ['./member-detail.component.css']
+  styleUrls: ['./member-detail.component.css'],
 })
 export class MemberDetailComponent implements OnInit {
   galleryOptions: NgxGalleryOptions[] = [];
   galleryImages: NgxGalleryImage[] = [];
   member!: Member;
   // 使用ActivatedRoute介面，就可以在Routing時將參數帶入。
-  constructor(private membersService:MembersService, private route: ActivatedRoute) { }
+  constructor(private membersService:MembersService, private route: ActivatedRoute, private intl: TimeagoIntl) {
+    intl.strings = stringsTW;
+    intl.changes.next();
+   }
 
   ngOnInit(): void {
 

@@ -4,7 +4,6 @@ import { Member } from 'src/app/_models/member';
 import { Pagination } from 'src/app/_models/pagination';
 import { User } from 'src/app/_models/user';
 import { UserParams } from 'src/app/_models/userParams';
-import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
@@ -20,11 +19,8 @@ export class MemberListComponent implements OnInit {
   user: User;
   genderList = [{value: 'male', display: '男性'},{value: 'female', display: '女性'}];
 
-  constructor(private memberServices: MembersService, private accountService: AccountService) { 
-    this.accountService.currentUser$.pipe(take(1)).subscribe(user=>{
-      this.user = user;
-      this.userParams = new UserParams(user);
-    })
+  constructor(private memberServices: MembersService) { 
+    this.userParams = this.memberServices.getUSerParams();
   }
 
   ngOnInit(): void {
@@ -36,6 +32,8 @@ export class MemberListComponent implements OnInit {
   
   loadMembers(){
 
+    this.memberServices.setUserParams(this.userParams);
+
     // 這裡是使用HttpResponse去取得資料，所以不用pipe
     this.memberServices.getMembers(this.userParams).subscribe(response=>{
       this.members = response.result;
@@ -45,11 +43,12 @@ export class MemberListComponent implements OnInit {
 
   pageChange(event: any){
     this.userParams.pageNumber = event.page;
+    this.memberServices.setUserParams(this.userParams);
     this.loadMembers();
   }
 
   resetFilters(){
-    this.userParams = new UserParams(this.user);
+    this.userParams = this.memberServices.reSetUserParams();
     this.loadMembers();
   }
 

@@ -1,11 +1,13 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { TimeagoIntl } from 'ngx-timeago';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
+import { strings as stringsTW } from 'ngx-timeago/language-strings/zh-TW';
 
 @Component({
   selector: 'app-memeber-edit',
@@ -30,7 +32,11 @@ export class MemeberEditComponent implements OnInit {
   constructor(
     private accountService: AccountService, 
     private memberService: MembersService, 
-    private toastr: ToastrService,) { 
+    private toastr: ToastrService, private intl: TimeagoIntl) { 
+
+      intl.strings = stringsTW;
+      intl.changes.next();
+
     // 因為currentUser$是Observiable，不能直接對其作業，所以要再這裡先把它拉出來。
     this.accountService.currentUser$.pipe(take(1)).subscribe(user=> this.user = user);
   }

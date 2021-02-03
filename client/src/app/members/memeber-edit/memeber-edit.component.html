@@ -23,11 +23,11 @@
                 </div>
                 <div>
                     <strong>加入時間:</strong>
-                    <p>{{member.accountCreateTime}}</p>
+                    <p>{{member.accountCreateTime | date: 'dd MMM yyyy'}}</p>
                 </div>
                 <div>
                     <strong>上次登入:</strong>
-                    <p>{{member.lastLoginTime}}</p>
+                    <p>{{member.lastLoginTime | timeago}}</p>
                 </div>
                 <div class="card-footer">
                     <button form="editForm" class="btn btn-success btn-block" [disabled]="!editForm.dirty">修改</button>
