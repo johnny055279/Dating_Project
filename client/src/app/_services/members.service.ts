@@ -55,7 +55,12 @@ export class MembersService {
       return of(response);
     }
 
-    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize, userParams.minAge, userParams.maxAge, userParams.gender, userParams.orderBy);
+    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+
+    params = params.append('minAge', userParams.minAge.toString());
+    params = params.append('maxAge', userParams.maxAge.toString());
+    params = params.append('gender', userParams.gender.toString());
+    params = params.append('orderBy', userParams.orderBy);
 
     // 想得到 HTTP 狀態碼、HTTP 回應標頭之類的資訊，就要特別加入 options 參數。
     // 這裡我們要抓的東西是response的body，並且運用params去做篩選
@@ -68,7 +73,7 @@ export class MembersService {
     }))
   }
 
-  private getPaginationResult<T>(url: string, params: HttpParams) {
+  getPaginationResult<T>(url: string, params: HttpParams) {
 
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
@@ -85,7 +90,7 @@ export class MembersService {
     }));
   }
 
-  private getPaginationHeaders(pageNumber: number, pageSize: number, minAge: number, maxAge: number, gender: string, orderBy: string){
+  getPaginationHeaders(pageNumber: number, pageSize: number){
 
     // HttpParams可以序列化我們的QueryString
     let params = new HttpParams();
@@ -93,11 +98,7 @@ export class MembersService {
     // 因為是要傳QueryString，所以要toString
     params = params.append('pageNumber', pageNumber.toString());
     params = params.append('pageSize', pageSize.toString());
-    params = params.append('minAge', minAge.toString());
-    params = params.append('maxAge', maxAge.toString());
-    params = params.append('gender', gender.toString());
-    params = params.append('orderBy', orderBy);
-
+  
     return params;
   }
 
@@ -137,4 +138,14 @@ export class MembersService {
     return this.http.delete(this.baseUrl + 'users/deletePhoto/' + photoId, {});
   }
 
+  addLike(username: string){
+    return this.http.post(this.baseUrl + 'likes/' + username, {});
+  }
+
+  getLikes(predicate: string, pageNumber: number, pageSize: number){
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    console.log(params);
+    return this.getPaginationResult<Partial<Member[]>>(this.baseUrl + 'likes', params);
+  }
 }

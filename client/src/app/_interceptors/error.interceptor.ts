@@ -40,8 +40,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                 // 將會回傳一個由原先陣列的子陣列串接而成的新陣列。
                 throw modalStateErrors.flat();
               }
+              else if(typeof(error.error) === 'object'){
+                this.toastr.error(error.statusText, error.status);
+              }
               else{
-                this.toastr.error(error.statusText === "OK" ? "發送請求錯誤。" : error.statusText, error.status);
+                this.toastr.error(error.error, error.status);
               }
               break;
             case 401:

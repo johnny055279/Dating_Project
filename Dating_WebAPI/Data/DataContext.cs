@@ -27,8 +27,10 @@ namespace Dating_WebAPI.Data
             // 建立複合式主鍵
             modelBuilder.Entity<UserLike>().HasKey(key => new { key.SourceUserId, key.LikeUserId });
 
-            // 建立資料表關聯性，這裡為多對多。
-            modelBuilder.Entity<UserLike>().HasOne(n => n.SourceUser).WithMany(n => n.LikedUsers).HasForeignKey(n => n.SourceUserId).OnDelete(DeleteBehavior.Cascade);
+            // 建立資料表關聯性，這裡為多對多。使用MSSQL的時候一個OnDelete要是NoAction，不然Migration會報錯。
+            modelBuilder.Entity<UserLike>().HasOne(n => n.SourceUser).WithMany(n => n.LikedUsers).HasForeignKey(n => n.SourceUserId).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<UserLike>().HasOne(n => n.LikeUser).WithMany(n => n.LikeByUser).HasForeignKey(n => n.LikeUserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

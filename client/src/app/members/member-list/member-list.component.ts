@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { Pagination } from 'src/app/_models/pagination';
 import { User } from 'src/app/_models/user';
@@ -29,7 +28,6 @@ export class MemberListComponent implements OnInit {
 
   }
 
-  
   loadMembers(){
 
     this.memberServices.setUserParams(this.userParams);

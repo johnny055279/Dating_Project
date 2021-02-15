@@ -56,7 +56,7 @@ namespace Dating_WebAPI.Controllers
         [HttpGet("badRequest")]
         public ActionResult<string> GetBadRequest()
         {
-            return BadRequest("發送請求錯誤囉!");
+            return BadRequest();
         }
     }
 }
