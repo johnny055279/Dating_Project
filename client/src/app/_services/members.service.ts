@@ -4,10 +4,10 @@ import { of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
-import { PaginatedResult } from '../_models/pagination';
 import { User } from '../_models/user';
 import { UserParams } from '../_models/userParams';
 import { AccountService } from './account.service';
+import { getPaginationHeaders, getPaginationResult } from './paginationHelper';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +55,7 @@ export class MembersService {
       return of(response);
     }
 
-    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+    let params = getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
 
     params = params.append('minAge', userParams.minAge.toString());
     params = params.append('maxAge', userParams.maxAge.toString());
@@ -64,7 +64,7 @@ export class MembersService {
 
     // 想得到 HTTP 狀態碼、HTTP 回應標頭之類的資訊，就要特別加入 options 參數。
     // 這裡我們要抓的東西是response的body，並且運用params去做篩選
-    return this.getPaginationResult<Member[]>(this.baseUrl + 'users', params).pipe(map(response => {
+    return getPaginationResult<Member[]>(this.baseUrl + 'users', params, this.http).pipe(map(response => {
 
       // 查詢結束過後，將查詢的結果儲存至暫存資料裡面，以供下次查詢時判斷。
       // values回傳一個陣列
@@ -73,45 +73,11 @@ export class MembersService {
     }))
   }
 
-  getPaginationResult<T>(url: string, params: HttpParams) {
-
-    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
-
-    return this.http.get<T>(url, { observe: 'response', params }).pipe(
-      map(response => {
-        // member array會塞在body
-        paginatedResult.result = response.body;
-
-        // 取得由API提供的Header
-        if (response.headers.get('Pagination') !== null) {
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return paginatedResult;
-    }));
-  }
-
-  getPaginationHeaders(pageNumber: number, pageSize: number){
-
-    // HttpParams可以序列化我們的QueryString
-    let params = new HttpParams();
-
-    // 因為是要傳QueryString，所以要toString
-    params = params.append('pageNumber', pageNumber.toString());
-    params = params.append('pageSize', pageSize.toString());
-  
-    return params;
-  }
-
   getMember(username: string){
-
-    console.log(this.memberCache);
-
     // 對於不同條件的篩選來說，有可能會有很多重複的資料儲存在快取裡面。
     // 因此這裡將memberCache的陣列，使用reduce()將每一個元素進行concat合併的動作，使其成為單一陣列，並且其初始值為[]。
     // 然後使用find去尋找第一個符合的元素。
     const member = [...this.memberCache.values()].reduce((array, element) => array.concat(element.result), []).find((member: Member) => member.userName === username);
-
-    console.log(member);
 
     if(member){
       return of(member);
@@ -143,9 +109,8 @@ export class MembersService {
   }
 
   getLikes(predicate: string, pageNumber: number, pageSize: number){
-    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    let params = getPaginationHeaders(pageNumber, pageSize);
     params = params.append('predicate', predicate);
-    console.log(params);
-    return this.getPaginationResult<Partial<Member[]>>(this.baseUrl + 'likes', params);
+    return getPaginationResult<Partial<Member[]>>(this.baseUrl + 'likes', params, this.http);
   }
 }

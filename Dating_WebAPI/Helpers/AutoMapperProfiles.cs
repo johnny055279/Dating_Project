@@ -32,6 +32,16 @@ namespace Dating_WebAPI.Helpers
             CreateMap<MemberUpdateDTO, AppUser>();
 
             CreateMap<RegisterDTO, AppUser>();
+
+            CreateMap<Message, MessageDto>()
+                .ForMember(destination => destination.SenderPhotoUrl,
+                                                       option => option.MapFrom(
+                                                       src => src.Sender.Photos.FirstOrDefault(
+                                                       n => n.IsMain).Url))
+                .ForMember(destination => destination.RecipientPhotoUrl,
+                                                       option => option.MapFrom(
+                                                       src => src.Recipient.Photos.FirstOrDefault(
+                                                       n => n.IsMain).Url));
         }
     }
 }

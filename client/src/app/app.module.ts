@@ -27,6 +27,7 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DateInputComponent } from './_forms/date-input/date-input.component';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 
 @NgModule({
   // 屬於此NgModule的Component、Directive與Pipe皆放置於此。
@@ -46,7 +47,8 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     MemeberEditComponent,
     PhotoEditorComponent,
     TextInputComponent,
-    DateInputComponent
+    DateInputComponent,
+    MemberMessagesComponent
   ],
 
   // 此NgModule需要使用、依賴的其他NgModule皆放置於此。

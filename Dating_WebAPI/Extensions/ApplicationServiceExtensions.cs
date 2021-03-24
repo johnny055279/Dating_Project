@@ -20,6 +20,8 @@ namespace Dating_WebAPI.Extensions
 
             services.AddScoped<IPhotosServices, PhotoServices>();
 
+            services.AddScoped<IMessageRepository, MessageRepository>();
+
             // 使用IAsyncActionFilter偵測每一次呼叫API時，可以做什麼事情。
             services.AddScoped<LogUserActivity>();
 
