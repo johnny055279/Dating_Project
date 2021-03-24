@@ -1,20 +1,20 @@
 ﻿using Dating_WebAPI.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Dating_WebAPI.Data
 {
-    public class DataContext : DbContext
+    // 使用自訂的IdentityUser、IdentityRole，這些東西會產生Identity系列的資料表。
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int,
+                                                 IdentityUserClaim<int>, AppUserRole,
+                                                 IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
         }
 
         // 名字要跟DataBase裡面一樣，不然會抓不到!!
-        public DbSet<AppUser> Users { get; set; }
 
         public DbSet<UserLike> Likes { get; set; }
 
@@ -25,6 +25,11 @@ namespace Dating_WebAPI.Data
         {
             // 不加這一段Migration會出錯。
             base.OnModelCreating(modelBuilder);
+
+            // 每個都 User 可以有許多相關聯 Roles ，而且每個都 Role 可以與許多相關聯 Users 。
+            // 這是多對多關聯性，需要資料庫中的聯結資料表。 聯結資料表是由 UserRole 實體表示。
+            modelBuilder.Entity<AppUser>().HasMany(n => n.UserRoles).WithOne(n => n.User).HasForeignKey(n => n.UserId).IsRequired();
+            modelBuilder.Entity<AppRole>().HasMany(n => n.UserRoles).WithOne(n => n.Role).HasForeignKey(n => n.RoleId).IsRequired();
 
             // 建立複合式主鍵
             modelBuilder.Entity<UserLike>().HasKey(key => new { key.SourceUserId, key.LikeUserId });

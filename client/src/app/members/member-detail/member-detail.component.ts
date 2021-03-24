@@ -68,7 +68,6 @@ export class MemberDetailComponent implements OnInit {
 
   loadMessages(){
     this.messageService.getMessageThread(this.member.userName).subscribe(response=>{
-      console.log(response);
       this.messages = response;
     })
   }

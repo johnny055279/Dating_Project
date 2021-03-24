@@ -1,10 +1,7 @@
 ﻿using Dating_WebAPI.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,9 +9,9 @@ namespace Dating_WebAPI.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager)
         {
-            if (await context.Users.AnyAsync()) return;
+            if (await userManager.Users.AnyAsync()) return;
 
             var userdata = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
 
@@ -22,18 +19,10 @@ namespace Dating_WebAPI.Data
 
             foreach (var user in users)
             {
-                using var hmac = new HMACSHA512();
-
                 user.UserName = user.UserName.ToLower();
 
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(user.UserName));
-
-                user.PasswordSalt = hmac.Key;
-
-                context.Users.Add(user);
+                await userManager.CreateAsync(user, "Pa$$w0rd");
             }
-
-            await context.SaveChangesAsync();
         }
     }
 }

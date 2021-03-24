@@ -1,5 +1,7 @@
 using Dating_WebAPI.Data;
+using Dating_WebAPI.Entities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +28,9 @@ namespace Dating_WebAPI
             {
                 // 每次啟動的時候，可以進行資料庫的Migration。
                 var context = service.GetRequiredService<DataContext>();
+                var userManager = service.GetRequiredService<UserManager<AppUser>>();
                 await context.Database.MigrateAsync();
-                await Seed.SeedUsers(context);
+                await Seed.SeedUsers(userManager);
             }
             catch (Exception ex)
             {

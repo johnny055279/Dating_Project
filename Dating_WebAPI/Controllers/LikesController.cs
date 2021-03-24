@@ -35,14 +35,14 @@ namespace Dating_WebAPI.Controllers
 
             if (sourceUser.UserName == userName) return BadRequest("不要對自己點讚!!");
 
-            var userLike = await _likesRepository.GetUserLike(sourceUserId, likeUser.UserId);
+            var userLike = await _likesRepository.GetUserLike(sourceUserId, likeUser.Id);
 
             if (userLike != null) return BadRequest("你已經按過讚惹!");
 
             userLike = new UserLike
             {
                 SourceUserId = sourceUserId,
-                LikeUserId = likeUser.UserId
+                LikeUserId = likeUser.Id
             };
 
             sourceUser.LikedUsers.Add(userLike);

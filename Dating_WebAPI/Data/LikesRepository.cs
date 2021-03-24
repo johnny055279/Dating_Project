@@ -50,7 +50,7 @@ namespace Dating_WebAPI.Data
                 Age = n.Birthday.CalculateAge(),
                 PhotoUrl = n.Photos.FirstOrDefault(n => n.IsMain == true).Url,
                 City = n.City,
-                Id = n.UserId
+                Id = n.Id
             });
 
             return await PageList<LikeDTO>.CreateAsync(likeUsers, likesParams.PageNumber, likesParams.PageSize);
@@ -58,7 +58,7 @@ namespace Dating_WebAPI.Data
 
         async Task<AppUser> ILikesRepository.GetUserWithLikes(int userId)
         {
-            return await _dataContext.Users.Include(n => n.LikedUsers).FirstOrDefaultAsync(n => n.UserId == userId);
+            return await _dataContext.Users.Include(n => n.LikedUsers).FirstOrDefaultAsync(n => n.Id == userId);
         }
     }
 }
