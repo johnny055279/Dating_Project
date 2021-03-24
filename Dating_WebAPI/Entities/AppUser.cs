@@ -5,13 +5,12 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Dating_WebAPI.Entities
 {
-
     // Identity預設是以字串當作PK，這裡改成int。
     public class AppUser : IdentityUser<int>
     {
         [Key]
         public string Gender { get; set; }
-        public byte[] PasswordSalt { get; set; }
+
         public string NickName { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime AccountCreateTime { get; set; } = DateTime.Now;

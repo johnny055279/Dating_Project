@@ -29,8 +29,9 @@ namespace Dating_WebAPI
                 // 每次啟動的時候，可以進行資料庫的Migration。
                 var context = service.GetRequiredService<DataContext>();
                 var userManager = service.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = service.GetRequiredService<RoleManager<AppRole>>();
                 await context.Database.MigrateAsync();
-                await Seed.SeedUsers(userManager);
+                await Seed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)
             {
